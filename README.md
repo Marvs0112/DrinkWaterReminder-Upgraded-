@@ -35,7 +35,7 @@ The Drink Water Reminder Android app helps you stay hydrated with personalized r
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/your-username/Drink-Water-Reminder.git
+   https://github.com/Marvs0112/DrinkWaterReminder-Upgraded-
    ```
 2. **Install Dependencies:**
    - Open the project in Android Studio and let it handle dependencies.
@@ -43,23 +43,17 @@ The Drink Water Reminder Android app helps you stay hydrated with personalized r
    - Connect your Android device or use an emulator.
    - Build and run the app to start tracking your water intake.
 
-## Contributing
-
-Contributions are welcome! If you'd like to improve the app, fix bugs, or add new features, feel free to submit a pull request.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/Benyormin/DrinkWaterReminder/blob/main/LICENSE) file for details.
 
 Remember, staying hydrated is essential for your health. Cheers to a well-hydrated you! 🥤💧
 
 ## Screenshots
 
-![photo_2024-04-11_00-00-11.jpg](https://github.com/Benyormin/DrinkWaterReminder/blob/main/Images/photo_2024-04-11_00-00-11.jpg)
-![image2](https://github.com/Benyormin/DrinkWaterReminder/blob/main/Images/photo_2024-04-11_00-00-29.jpg)
-![Image3](https://github.com/Benyormin/DrinkWaterReminder/blob/main/Images/photo_2024-04-11_00-00-30.jpg)
-![Image4](https://github.com/Benyormin/DrinkWaterReminder/blob/main/Images/photo_2024-04-11_00-00-31.jpg)
+![Image1](https://github.com/Marvs0112/DrinkWaterReminder-Upgraded-/blob/main/images/Images1.jpg)
+![image2](https://github.com/Marvs0112/DrinkWaterReminder-Upgraded-/blob/main/images/Image2.jpg)
+![Image3](https://github.com/Marvs0112/DrinkWaterReminder-Upgraded-/blob/main/images/Image3.jpg)
+![Image4](https://github.com/Marvs0112/DrinkWaterReminder-Upgraded-/blob/main/images/Image4.jpg)
+![Image5](https://github.com/Marvs0112/DrinkWaterReminder-Upgraded-/blob/main/images/Image5.jpg)
+![Image6](https://github.com/Marvs0112/DrinkWaterReminder-Upgraded-/blob/main/images/Image6.jpg)
 
 # Drink-Your-Water-Bee
-# Drink-Your-Water-Bee
-# DrinkWaterReminder-Upgraded-
+
