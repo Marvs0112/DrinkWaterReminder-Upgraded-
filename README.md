@@ -57,3 +57,30 @@ Remember, staying hydrated is essential for your health. Cheers to a well-hydrat
 
 # Drink-Your-Water-Bee
 
+# 📄 Project Contributors
+Researchers/Developers:
+
+Anasco, Marvin
+Bausas, Bea Alexa
+Baingan, Dwen
+Malaque, Jeramel
+Shibata, Shinji
+
+Adviser:
+Jefferson A. Costales
+
+# 🏫 Academic Institution
+School Name:
+Eulogio "Amang" Rodriguez Institute of Science and Technology
+Nagtahan, Sampaloc, Manila, Philippines
+
+College:
+College Computing Studies (CCS)
+
+Department:
+ITE Department
+
+Course:
+Bachelor of Science in Information Technology
+
+
