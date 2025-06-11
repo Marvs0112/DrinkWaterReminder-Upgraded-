@@ -57,7 +57,7 @@ Remember, staying hydrated is essential for your health. Cheers to a well-hydrat
 # Exporting your history
 ![Image3](https://github.com/Marvs0112/DrinkWaterReminder-Upgraded-/blob/main/images/Image3.jpg)
 
-#Manage Notification (It also auto generate your water remiders)
+# Manage Notification (It also auto generate your water remiders)
 ![Image4](https://github.com/Marvs0112/DrinkWaterReminder-Upgraded-/blob/main/images/Image4.jpg)
 
 # Size of Cup
