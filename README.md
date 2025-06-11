@@ -70,11 +70,11 @@ Remember, staying hydrated is essential for your health. Cheers to a well-hydrat
 
 # 📄 Project Contributors / Researchers/Developers:
 
- Anasco, Marvin. ,
- Bausas, Bea Alexa. , 
- Baingan, Dwen. ,
- Malaque, Jeramel. , 
- Shibata, Shinji.
+ Anasco Marvin. ,
+ Bausas Bea Alexa. , 
+ Baingan Dwen. ,
+ Malaque Jeramel. , 
+ Shibata Shinji.
 
 # Adviser:
  Jefferson A. Costales
