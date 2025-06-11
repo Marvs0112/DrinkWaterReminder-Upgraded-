@@ -2,10 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/notif_menu"
-        android:title="notification"
-        android:icon="@drawable/ic_baseline_notifications_24"
-        app:showAsAction="always"
-
-        />
+        android:id="@+id/action_export_history"
+        android:title="Export History"
+        android:icon="@drawable/outline_file_export_24"
+        app:showAsAction="ifRoom" />
 </menu>

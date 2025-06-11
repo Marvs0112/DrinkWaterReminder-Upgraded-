@@ -32,7 +32,6 @@ class MyAdapter(private val context: Context) :
             notifyDataSetChanged()
             
             (context as? DrinkHistoryActivity)?.let { activity ->
-                activity.saveData(context)
                 activity.transfer_ml(amount)
             }
         }

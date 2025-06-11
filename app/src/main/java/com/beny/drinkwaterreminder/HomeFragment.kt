@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.beny.drinkwaterreminder.databinding.FragmentHomeBinding
 import com.google.gson.Gson
-import androidx.core.app.NotificationManagerCompat
 import java.util.*
 
 class HomeFragment : Fragment() {
@@ -57,23 +56,35 @@ class HomeFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate called")
+        context?.let { ctx ->
+            NotificationUtils(ctx)
+            setResettingProgressBar()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated called")
+        
         setupSharedPreferences()
+        setupViews()
         setupProgressBar()
         setupClickListeners()
         setupTips()
         startProgressMonitoring()
-        setResettingProgressBar()
     }
 
     override fun onDestroyView() {
@@ -161,12 +172,6 @@ class HomeFragment : Fragment() {
                 putInt("goal", goal.toInt())
                 apply()
             }
-
-            // Schedule reminders based on the new goal
-            context?.let { ctx ->
-                WaterReminderScheduler(ctx).scheduleReminders()
-                Log.d(TAG, "Scheduled reminders for goal: $goal ml")
-            }
         }
 
         timeDeference = bedHour - wakeHour
@@ -189,11 +194,6 @@ class HomeFragment : Fragment() {
                 
                 // Stop any currently playing alarm
                 WaterReminderReceiver.stopCurrentAlarm()
-                context?.let { ctx ->
-                    // Cancel any ongoing notifications
-                    val notificationManager = NotificationManagerCompat.from(ctx)
-                    notificationManager.cancelAll()
-                }
                 
                 progressBar.max = goal.toInt()
                 progressBar.incrementProgressBy(sizeOfCup.toInt())
@@ -221,11 +221,8 @@ class HomeFragment : Fragment() {
                 val currentTime = Calendar.getInstance().time
                 val drinkObj = DrinkedList(currentTime.toString(), sizeOfCup.toInt())
                 DrinkedList.Drinked.add(drinkObj)
-                
+                saveDrinkHistory()
                 saveData()
-                
-                // Show confirmation
-                Toast.makeText(context, "Great job staying hydrated!", Toast.LENGTH_SHORT).show()
             }
 
             List.setOnClickListener {
@@ -321,10 +318,6 @@ class HomeFragment : Fragment() {
                 .edit()
                 .putInt("goal", binding.progressBar.max)
                 .apply()
-
-            // Schedule reminders whenever goal is saved/updated
-            WaterReminderScheduler(ctx).scheduleReminders()
-            Log.d(TAG, "Rescheduled reminders after saving data")
         }
     }
 
@@ -377,5 +370,16 @@ class HomeFragment : Fragment() {
         
         // Show success message
         Toast.makeText(requireContext(), "Great job staying hydrated!", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun saveDrinkHistory() {
+        context?.let { ctx ->
+            val sharedPreferences = ctx.getSharedPreferences("drinked", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            val gson = Gson()
+            val json = gson.toJson(DrinkedList.Drinked)
+            editor.putString("drinked_list", json)
+            editor.apply()
+        }
     }
 } 

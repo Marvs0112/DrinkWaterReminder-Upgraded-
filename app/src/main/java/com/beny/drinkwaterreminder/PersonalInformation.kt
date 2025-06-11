@@ -12,10 +12,10 @@ class PersonalInformation(
         
         // Add extra water based on workout intensity
         val workoutExtra = when (workout) {
-            0 -> 0.0     // No workout
-            1 -> 350.0   // Light workout
-            2 -> 500.0   // Moderate workout
-            3 -> 1000.0  // Intense workout
+            1 -> 0.0     // No workout
+            2 -> 350.0   // Light workout
+            3 -> 500.0   // Moderate workout
+            4 -> 1000.0  // Intense workout
             else -> 0.0
         }
         
@@ -29,4 +29,25 @@ class PersonalInformation(
     fun getBedTime(): String = bedTime
     
     fun getWeight(): Double = weight
+
+    companion object {
+        // Map category index to guideline ml (same order as spinner in DailyGoalDialog)
+        val guidelineMl = listOf(
+            946,   // 1-3 years
+            1183,  // 4-8 years
+            1657,  // 9-13 years
+            1893,  // 14-18 years
+            3073,  // Men, 19+
+            2130,  // Women, 19+
+            2366,  // Pregnant women
+            3073   // Breastfeeding women
+        )
+    }
+
+    fun personalizedGoal(categoryIndex: Int): Double {
+        val base = (guidelineMl.getOrNull(categoryIndex) ?: 2000).toDouble() // fallback to 2000ml
+        val extra = GoalCalculator() // This is the total from weight/workout
+        // Only add extra if weight/workout is provided (e.g., weight > 0 or workout > 1)
+        return if (weight > 0 || workout > 1) base + (extra - 2000.0) else base
+    }
 } 

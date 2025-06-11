@@ -1,25 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".NotificationReminder">
 
+    <TextView
+        android:id="@+id/reminderHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Your Water Reminders"
+        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+        android:paddingTop="24dp"
+        android:paddingBottom="8dp"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/ReminderRecycleView"
-        />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@id/reminderHeader"
+        app:layout_constraintBottom_toTopOf="@id/autoScheduleButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/autoScheduleButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Auto-Schedule Reminders"
+        style="@style/Widget.Material3.Button"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toTopOf="@id/floatingActionButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floating_action_button"
+        android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
-        app:srcCompat="@drawable/ic_baseline_add_24"
-        tools:ignore="VectorDrawableCompat" />
+        android:layout_margin="24dp"
+        android:contentDescription="Add reminder"
+        android:src="@drawable/ic_baseline_add_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

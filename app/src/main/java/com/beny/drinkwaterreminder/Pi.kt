@@ -3,6 +3,8 @@ package com.beny.drinkwaterreminder
 import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.text.format.DateFormat
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +23,7 @@ class Pi : AppCompatActivity() {
         
         loadSavedData()
         setupClickListeners()
+        setupLiveGoalCalculation()
     }
     
     private fun loadSavedData() {
@@ -48,6 +51,39 @@ class Pi : AppCompatActivity() {
         }
     }
     
+    private fun setupLiveGoalCalculation() {
+        val watcher = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) = updateCalculatedGoal()
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        }
+        binding.weighttxt.addTextChangedListener(watcher)
+        binding.workoutid.addTextChangedListener(watcher)
+        // Also update when time is picked
+        binding.selectWakeup.setOnClickListener {
+            showTimePickerDialog(true)
+            // updateCalculatedGoal() will be called after time is picked
+        }
+        binding.selectBedtime.setOnClickListener {
+            showTimePickerDialog(false)
+            // updateCalculatedGoal() will be called after time is picked
+        }
+    }
+    
+    private fun updateCalculatedGoal() {
+        val weight = binding.weighttxt.text.toString().toDoubleOrNull() ?: 0.0
+        val workout = binding.workoutid.text.toString().toIntOrNull() ?: 1
+        val wakeup = binding.wakeUptxt.text.toString()
+        val bed = binding.bedTimetxt.text.toString()
+        if (weight > 0 && wakeup.isNotBlank() && bed.isNotBlank()) {
+            val pi = PersonalInformation(workout, wakeup, bed, weight)
+            val goal = pi.GoalCalculator().toInt()
+            binding.calculatedGoal.text = "$goal ml"
+        } else {
+            binding.calculatedGoal.text = "—"
+        }
+    }
+    
     private fun showTimePickerDialog(isWakeup: Boolean) {
         val calendar = Calendar.getInstance()
         val is24HourFormat = DateFormat.is24HourFormat(this)
@@ -63,6 +99,7 @@ class Pi : AppCompatActivity() {
                     selectedBedTime = time
                     binding.bedTimetxt.text = time
                 }
+                updateCalculatedGoal()
             },
             calendar.get(Calendar.HOUR_OF_DAY),
             calendar.get(Calendar.MINUTE),
@@ -127,17 +164,14 @@ class Pi : AppCompatActivity() {
                 .putBoolean("personal_Information", true)
                 .apply()
             
-            // Also save in dailyGoal preferences
+            // --- Sync with DailyGoalDialog ---
             getSharedPreferences("dailyGoal", Context.MODE_PRIVATE)
                 .edit()
                 .putInt("goal", newGoal.toInt())
                 .apply()
             
-            // Schedule reminders based on new settings
-            WaterReminderScheduler(this@Pi).scheduleReminders()
-            
             // Show confirmation
-            Toast.makeText(this@Pi, "Daily goal set to ${newGoal}ml - Reminders scheduled", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@Pi, "Daily goal set to ${newGoal}ml", Toast.LENGTH_LONG).show()
         }
     }
     

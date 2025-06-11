@@ -21,4 +21,26 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/tvReferenceLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reference: Water Intake Guidelines"
+        android:textColor="@android:color/holo_blue_dark"
+        android:autoLink="web"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"
+        android:focusable="true"
+        android:textSize="14sp"
+        android:paddingBottom="8dp"
+        android:contentDescription="Reference link for water intake guidelines" />
+
+    <Spinner
+        android:id="@+id/spinnerCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:contentDescription="Select your age/gender category for water intake suggestion" />
+
 </LinearLayout> 

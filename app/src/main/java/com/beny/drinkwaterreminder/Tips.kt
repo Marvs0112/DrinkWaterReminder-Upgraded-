@@ -30,7 +30,8 @@ class Tips : AppCompatActivity() {
             "Set reminders to drink water throughout the day",
             "Drink water before, during, and after exercise",
             "Have a glass of water before each meal",
-            "Track your daily water intake"
+            "Track your daily water intake",
+            "Dehydration: Symptoms & Risks\n\nSymptoms of dehydration:\n• Fatigue\n• Confusion or short-term memory loss\n• Mood changes like increased irritability or depression\n\nRisks of dehydration:\n• Urinary tract infections\n• Kidney stones\n• Gallstones\n• Constipation"
         )
     }
 } 

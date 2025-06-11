@@ -17,21 +17,13 @@ import androidx.core.app.NotificationManagerCompat
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import androidx.fragment.app.Fragment
-import androidx.core.app.NotificationCompat
 import android.net.Uri
-import android.os.PowerManager
 import android.provider.Settings
-import androidx.core.content.ContextCompat
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import android.content.ComponentName
-import android.app.AlarmManager
-import android.app.KeyguardManager
-import android.Manifest
-import android.content.pm.PackageManager
+import android.os.PowerManager
+import android.app.AlertDialog
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var permissionManager: PermissionManager
     
     companion object {
         private const val TAG = "MainActivity"
@@ -40,10 +32,6 @@ class MainActivity : AppCompatActivity() {
         const val CHANNEL_NAME = "reminder"
         lateinit var context: Context
             private set
-        private const val REQUEST_IGNORE_BATTERY_OPTIMIZATIONS = 1001
-        private const val REQUEST_NOTIFICATION_PERMISSION = 123
-        private const val REQUEST_EXACT_ALARM = 1003
-        private const val WAKELOCK_TIMEOUT = 10*60*1000L // 10 minutes
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,24 +40,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         context = applicationContext
-        permissionManager = PermissionManager(this)
-        
-        // Request all permissions automatically
-        permissionManager.requestAllPermissions {
-            // This will be called when all permissions are granted
-            onAllPermissionsGranted()
-        }
-    }
-    
-    private fun onAllPermissionsGranted() {
-        // Initialize app components after permissions are granted
         checkFirstRun()
         NotificationUtils(this)
         handleIntent()
         createNotificationChannel()
-        
-        // Start the foreground service
-        WaterReminderForegroundService.startService(this)
+        checkBatteryOptimization()
         
         // Check if launched from notification
         if (intent?.getBooleanExtra("FROM_NOTIFICATION", false) == true) {
@@ -79,81 +54,126 @@ class MainActivity : AppCompatActivity() {
             }
         }
         
-        // Setup navigation
-        setupBottomNavigation()
-        
-        // Start with home fragment
-        if (supportFragmentManager.findFragmentById(R.id.fragment_container) == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, HomeFragment.newInstance())
-                .commit()
-        }
-    }
-    
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        permissionManager.handleActivityResult(requestCode, resultCode, data)
-    }
-    
-    private fun checkFirstRun() {
-        val prefs = getSharedPreferences("FirstRun", Context.MODE_PRIVATE)
-        if (prefs.getBoolean("firstrun", true)) {
-            startActivity(Intent(this, Pi::class.java))
-            prefs.edit().putBoolean("firstrun", false).apply()
-        }
-    }
-    
-    private fun handleIntent() {
-        if (intent?.action == "OPEN_SETTINGS") {
-            // Handle any specific settings navigation if needed
-        }
-    }
-    
-    private fun createNotificationChannel() {
-        NotificationUtils(this)
-    }
-    
-    private fun setupBottomNavigation() {
-        // Set the default selected item
-        binding.bottomNavigation.selectedItemId = R.id.navigation_home
-
-        Log.d(TAG, "Setting up bottom navigation")
-        
-        // Start with home fragment
-        if (supportFragmentManager.findFragmentById(R.id.fragment_container) == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, HomeFragment.newInstance())
-                .commit()
-        }
-
+        // Set up bottom navigation
         binding.bottomNavigation.setOnItemSelectedListener { item ->
-            Log.d(TAG, "Bottom navigation item selected: ${item.title}")
-            
-            // Get current fragment
-            val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-            
-            // Only perform transaction if we're actually changing fragments
             when (item.itemId) {
                 R.id.navigation_home -> {
-                    if (currentFragment !is HomeFragment) {
-                        Log.d(TAG, "Navigating to Home fragment")
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, HomeFragment.newInstance())
-                            .commit()
-                    }
+                    loadFragment(HomeFragment())
                     true
                 }
                 R.id.navigation_settings -> {
-                    if (currentFragment !is SettingsFragment) {
-                        Log.d(TAG, "Navigating to Settings fragment")
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, SettingsFragment.newInstance())
-                            .commit()
-                    }
+                    loadFragment(SettingsFragment())
                     true
                 }
                 else -> false
             }
         }
+        
+        // Load default fragment
+        if (savedInstanceState == null) {
+            loadFragment(HomeFragment())
+        }
+    }
+
+    private fun handleIntent() {
+        intent?.let { intent ->
+            val ml = intent.getIntExtra("ml", -1)
+            getSharedPreferences(PREF_TAG, Context.MODE_PRIVATE).edit().apply {
+                putInt("ml", ml)
+                putBoolean("isDelete", true)
+                apply()
+            }
+
+            val clicked = intent.getBooleanExtra("CLicked", false)
+            if (clicked) {
+                DailyGoalDialog().show(supportFragmentManager, "Daily goal")
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun checkFirstRun() {
+        val PREFS_NAME = "MyPrefsFile"
+        val DOESNT_EXIST = -1
+
+        val currentVersionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            packageManager.getPackageInfo(packageName, 0).longVersionCode.toInt()
+        } else {
+            @Suppress("DEPRECATION")
+            packageManager.getPackageInfo(packageName, 0).versionCode
+        }
+        
+        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+        val savedVersionCode = prefs.getInt("version_code", DOESNT_EXIST)
+
+        when {
+            currentVersionCode == savedVersionCode -> {
+                getSharedPreferences("isFirstTime", Context.MODE_PRIVATE).edit().apply {
+                    putBoolean("isFirstTime", false)
+                    apply()
+                }
+            }
+            savedVersionCode == DOESNT_EXIST -> {
+                startActivity(Intent(this, Pi::class.java))
+                getSharedPreferences("isFirstTime", Context.MODE_PRIVATE).edit().apply {
+                    putBoolean("isFirstTime", true)
+                    apply()
+                }
+            }
+            currentVersionCode > savedVersionCode -> {
+                // Handle upgrade scenario
+            }
+        }
+
+        prefs.edit().putInt("version_code", currentVersionCode).apply()
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.channel_name)
+            val descriptionText = getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun checkBatteryOptimization() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val powerManager = getSystemService(POWER_SERVICE) as PowerManager
+            val packageName = packageName
+            if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
+                AlertDialog.Builder(this)
+                    .setTitle("Battery Optimization")
+                    .setMessage("To ensure water reminders work properly, please disable battery optimization for this app.")
+                    .setPositiveButton("Open Settings") { _, _ ->
+                        val intent = Intent().apply {
+                            action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                            data = Uri.parse("package:$packageName")
+                        }
+                        startActivity(intent)
+                    }
+                    .setNegativeButton("Later", null)
+                    .show()
+            }
+        }
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .commit()
     }
 } 

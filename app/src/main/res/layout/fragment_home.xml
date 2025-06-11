@@ -128,13 +128,13 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/drinkWaterBtn"
+            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
             android:layout_width="wrap_content"
             android:layout_height="56dp"
             android:text="Drink Water"
-            app:cornerRadius="28dp"
-            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
-            app:icon="@mipmap/ic_drink_water"
-            android:textAppearance="?attr/textAppearanceBodyLarge" />
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:textStyle="bold"
+            app:cornerRadius="28dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/changeCup"

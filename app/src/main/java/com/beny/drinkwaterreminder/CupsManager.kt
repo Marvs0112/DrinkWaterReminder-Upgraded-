@@ -84,11 +84,7 @@ class CupsManager : AppCompatActivity() {
             .putString("cupsize", selectedCupSize.toString())
             .apply()
         
-        // Reschedule reminders with new cup size
-        WaterReminderScheduler(this).scheduleReminders()
-        Log.d(TAG, "Rescheduled reminders with new cup size: $selectedCupSize ml")
-        
-        Toast.makeText(this, "Cup size updated and reminders rescheduled", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Cup size updated successfully", Toast.LENGTH_SHORT).show()
         finish()
     }
 } 
