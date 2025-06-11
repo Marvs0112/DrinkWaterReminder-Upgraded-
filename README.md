@@ -48,11 +48,22 @@ Remember, staying hydrated is essential for your health. Cheers to a well-hydrat
 
 ## Screenshots
 
+#Homepage (tracking your water intake)
 ![Image1](https://github.com/Marvs0112/DrinkWaterReminder-Upgraded-/blob/main/images/Images1.jpg)
+
+#History of water intake 
 ![image2](https://github.com/Marvs0112/DrinkWaterReminder-Upgraded-/blob/main/images/Image2.jpg)
+
+#Exporting your history
 ![Image3](https://github.com/Marvs0112/DrinkWaterReminder-Upgraded-/blob/main/images/Image3.jpg)
+
+#Manage Notification (It also auto generate your water remiders)
 ![Image4](https://github.com/Marvs0112/DrinkWaterReminder-Upgraded-/blob/main/images/Image4.jpg)
+
+#Size of Cup
 ![Image5](https://github.com/Marvs0112/DrinkWaterReminder-Upgraded-/blob/main/images/Image5.jpg)
+
+#Personal information
 ![Image6](https://github.com/Marvs0112/DrinkWaterReminder-Upgraded-/blob/main/images/Image6.jpg)
 
 # Drink-Your-Water-Bee
