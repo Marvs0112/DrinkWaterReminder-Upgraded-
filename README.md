@@ -1,4 +1,4 @@
-# Drink Water Reminder
+# Drink Your Water Bee (Water Intake Reminder)
 
 The Drink Water Reminder Android app helps you stay hydrated with personalized recommendations, smart reminders, and a modern, user-friendly interface. Whether you're a fitness enthusiast, a busy professional, or simply want to maintain optimal hydration, this app has you covered.
 
