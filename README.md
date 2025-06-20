@@ -81,11 +81,11 @@ Remember, staying hydrated is essential for your health. Cheers to a well-hydrat
 
 # 🏫 Academic Institution
 School Name:
-Eulogio "Amang" Rodriguez Institute of Science and Technology
+(EARIST) - Eulogio "Amang" Rodriguez Institute of Science and Technology
 Nagtahan, Sampaloc, Manila, Philippines
 
 College:
-College Computing Studies (CCS)
+College of Computing Studies (CCS)
 
 Department:
 ITE Department
