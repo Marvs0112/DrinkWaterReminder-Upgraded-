@@ -46,6 +46,9 @@ The Drink Water Reminder Android app helps you stay hydrated with personalized r
 
 Remember, staying hydrated is essential for your health. Cheers to a well-hydrated you! 🥤💧
 
+## Demo Video
+Click the link to watch the video 
+
 ## Screenshots
 
 # Homepage (tracking your water intake)
